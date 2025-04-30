@@ -1,3 +1,24 @@
+// Your web app's Firebase configuration
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyCxciU3r_ppWUZOXZuqY-k0iz3qyZ9zGus",
+  
+    authDomain: "kevat-haamupeli-harjoitus.firebaseapp.com",
+  
+    projectId: "kevat-haamupeli-harjoitus",
+  
+    storageBucket: "kevat-haamupeli-harjoitus.firebasestorage.app",
+  
+    messagingSenderId: "198316081707",
+  
+    appId: "1:198316081707:web:f6bad591c92005f6dd606e"
+  
+  };
+
+const app = initializeApp(firebaseConfig);  
+const db = app.firestore();
+
 const BOARD_SIZE = 20;
 const cellSize = calculateCellSize();
 let board;
@@ -9,6 +30,8 @@ let ghostInterval;
 let  score = 0;
 
 document.getElementById('new-game-btn').addEventListener('click',startGame);
+document.getElementById('save-scores-btn').addEventListener('click',saveScore);
+document.getElementById('exit-btn').addEventListener('click',exitGame);
 
 document.addEventListener('keydown',(event)=>{
     if(!isGameRunning)
@@ -42,6 +65,7 @@ document.addEventListener('keydown',(event)=>{
             shootAt(player.x  + 1, player.y);
             break;
     }
+    
     event.preventDefault(); //estää scrollauksen nettisivulla
 });
 
@@ -225,14 +249,38 @@ function endGame(){
     isGameRunning = false;
     clearInterval(ghostInterval); 
     alert('Game Over! THe ghost caught you!');
-    document.getElementById('intro-screen').style.display = 'block';
-    document.getElementById('game-screen').style.display = 'none';
+    //document.getElementById('intro-screen').style.display = 'block';
+    //document.getElementById('game-screen').style.display = 'none';
+    document.getElementById('game-over-screen').style.display = 'block';
 }
 
 function updateScoreBoard(points){
     const  scoreBoard = document.getElementById('score-board');
     score += points;
     scoreBoard.textContent = `Pisteet: ${score}`;
+}
+
+function  saveScore(){
+    console.log('saveScore');
+    const playerName = document.getElementById('player-name').value;
+    console.log(playerName);
+    if(playerName.trim() === '')
+    {
+        alert('Please enter your name');
+        return;
+    }
+    db.collection("scores").add({
+        name: playerName,
+        score: score,
+        timestamp: app.firestore.FieldValue.serverTimestamp(),
+    });
+    exitGame();
+}
+
+function exitGame(){
+    document.getElementById('intro-screen').style.display ='block';
+    document.getElementById('game-screen').style.display ='none';
+    document.getElementById('game-over-screen').style.display ='none';
 }
 
 function startNextLevel(){
