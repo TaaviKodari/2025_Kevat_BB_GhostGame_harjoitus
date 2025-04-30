@@ -6,25 +6,37 @@
     <title>Ghost peli</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
     <script src="script.js" defer></script>
 
 </head>
 <body>
-    <div id="intro-screen">
-        <h1>Tervetuloa pelamaan Black Belt Kevät -25 peliä!</h1>
-        <p>Ammu kummitukset päästäksesi seuraavalle tasolle.</p>
-        <h2>Kummitukset</h2>
-        <div>
-            <img src="images/ghost.png">
+
+    <div id ="intro-container">
+
+        <div id="intro-screen">
+            <h1>Tervetuloa pelamaan Black Belt Kevät -25 peliä!</h1>
+            <p>Ammu kummitukset päästäksesi seuraavalle tasolle.</p>
+            <h2>Kummitukset</h2>
             <div>
-                <h3>Kummitus</h3>
-                <p>An orange ghost with menacing horns. This relentless fiend constantly huns the player, moving directly towards them. When obstructed, ghost resorts to random movement. Its speed is notably brisk, adding a sense of urgency to the chase. </p>
+                <img src="images/ghost.png">
+                <div>
+                    <h3>Kummitus</h3>
+                    <p>An orange ghost with menacing horns. This relentless fiend constantly huns the player, moving directly towards them. When obstructed, ghost resorts to random movement. Its speed is notably brisk, adding a sense of urgency to the chase. </p>
+                </div>
+            </div>
+            <div>
+            <button id="new-game-btn">Aloita peli</button>
+
+            <div class="best-scores-board">
+                <h2> Parhaat pisteet</h2>
+                <div id="top-ten-scores"></div>
             </div>
         </div>
-        <div>
-            <button id="new-game-btn">Aloita peli</button>
-        </div>
     </div>
+
+    
+</div>
 
     <div id="game-screen">
         <div id="game-board"></div>
@@ -39,6 +51,8 @@
         <button id="save-scores-btn">Kyllä</button>
         <button id="exit-btn">Ei</button>
     </div>
+
+    
 
 </body>
 </html>

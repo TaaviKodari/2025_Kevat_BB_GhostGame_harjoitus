@@ -16,8 +16,9 @@ const firebaseConfig = {
   
   };
 
-const app = initializeApp(firebaseConfig);  
-const db = app.firestore();
+firebase.initializeApp(firebaseConfig);  
+const db = firebase.firestore();
+showTop10();
 
 const BOARD_SIZE = 20;
 const cellSize = calculateCellSize();
@@ -65,7 +66,7 @@ document.addEventListener('keydown',(event)=>{
             shootAt(player.x  + 1, player.y);
             break;
     }
-    
+
     event.preventDefault(); //estää scrollauksen nettisivulla
 });
 
@@ -272,15 +273,31 @@ function  saveScore(){
     db.collection("scores").add({
         name: playerName,
         score: score,
-        timestamp: app.firestore.FieldValue.serverTimestamp(),
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
     exitGame();
+}
+
+function showTop10(){
+    db.collection("scores").orderBy("score","desc").limit(10).get().then(snapshot=>{
+        const container = document.getElementById("top-ten-scores");
+        container.innerHTML = "";
+        const ol = document.createElement("ol");
+        snapshot.forEach(doc =>{
+            const data = doc.data();
+            const li = document.createElement("li");
+            li.textContent = `${data.name}: ${data.score}`;
+            ol.appendChild(li);
+        });
+        container.appendChild(ol); 
+    })
 }
 
 function exitGame(){
     document.getElementById('intro-screen').style.display ='block';
     document.getElementById('game-screen').style.display ='none';
     document.getElementById('game-over-screen').style.display ='none';
+    showTop10();
 }
 
 function startNextLevel(){
